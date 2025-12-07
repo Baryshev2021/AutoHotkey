@@ -5,10 +5,9 @@ helpStr := "
 (
 Ctrl + Shift + F1   - Показать сочетания клавиш (Это окно)
 Alt  + Shift + F1   - Показать настройки
-Ctrl + Shift + Num+ - //<+ $изм$
-Ctrl + Shift + Num* - //<* $изм$
-Ctrl + Shift + Num- - //<- $изм$
-Ctrl + Shift + N    -  ЕСТЬ NULL
+Ctrl + Shift + T    - Запускает основной скрипт (mainScriptPath)
+=================  Для 1С  =================
+Ctrl + Shift + N    - ЕСТЬ NULL
 Alt  + Shift + N    - ЕстьNULL(, )
 Ctrl + Shift + ,    - Вставляет <
 Ctrl + Shift + .    - Вставляет >
@@ -19,7 +18,11 @@ Ctrl + Shift + 2    - Вставляет @
 Ctrl + Shift + 3    - Вставляет #
 Ctrl + Shift + 7    - Вставляет &
 Ctrl + Shift + \    - Вставляет |
-Ctrl + Shift + T    - Запускает основной скрипт (mainScriptPath)
+=================  Пометка кода  =================
+Ctrl + Shift + Num+ - //<+ $изм$
+Ctrl + Shift + Num* - //<* $изм$
+Ctrl + Shift + Num- - //<- $изм$
+=================  Скриншот  =================
 Win  + s            - Сохранить скрин экрана
 Win  + a            - Сохранить скрин активного окна
 Win  + c            - Сохранить скрин канваса активного окна
@@ -27,6 +30,12 @@ Win  + Ctrl + a     - Сохранить скрин активного окна 
 Win  + Ctrl + c     - Сохранить скрин канваса активного окна (рендер)
 Win  + n            - Ввести и сохранить заметку
 Win  + o            - Открыть папку с заметками
+=================  Запустить  =================
+Win  + Alt + p      - Запустить Paint
+Win  + Alt + n      - Запустить Блокнот
+Win  + Alt + c      - Запустить Калькулятор
+Win  + Alt + w      - Запустить Word
+Win  + Alt + e      - Запустить Excel
 )"
 
 ^+F1:: MsgBox(helpStr)
@@ -42,6 +51,13 @@ mainScriptPath := '.mainScriptPath.'
 	varsText := StrReplace(varsText, ".mainScriptPath.", mainScriptPath)
 	MsgBox(varsText)
 }
+
+#!p:: run("mspaint.exe")
+#!n:: run("notepad.exe")
+#!c:: run("calc.exe")
+#!w:: run("winword.exe")
+#!e:: run("excel.exe")
+
 #o:: {
     try {
         run("explorer " folderPathScreenshots)
@@ -104,10 +120,10 @@ SaveTextToFile(text) {
 	TimeString := FormatTime(, "yyyy`_MM`_dd HH:mm:ss")
 	NewString := "
 	(
-		//<* $изм$ .userName. .TimeString.
-		//
-
-		//*> $изм$ .userName. .TimeString.
+	//<* $изм$ .userName. .TimeString.
+	//
+	
+	//*> $изм$ .userName. .TimeString.
 	)"
 	NewString := StrReplace(NewString, ".userName.", userName)
 	NewString := StrReplace(NewString, ".TimeString.", TimeString)
@@ -129,8 +145,8 @@ SaveTextToFile(text) {
 }
 ^+n::SendText "ЕСТЬ NULL"
 !+n::SendText "ЕстьNULL(, )"
-^+,::SendText "<"
-^+.::SendText ">"
+^+VKBC::SendText "<"
+^+VKBE::SendText ">"
 ^+VKDB::SendText "["
 ^+VKDD::SendText "]"
 ^+VKDE::SendText "'"
@@ -139,4 +155,3 @@ SaveTextToFile(text) {
 ^+7::SendText "&"
 ^+\::SendText "|"
 ^+t::Run mainScriptPath
-
